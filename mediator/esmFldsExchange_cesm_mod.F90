@@ -765,9 +765,11 @@ contains
     ! to atm: surface snow water equivalent from land
     ! ---------------------------------------------------------------------
     allocate(flds(3))
-    flds = (/'Sl_fv   ',&
-             'Sl_ram1 ',&
-             'Sl_snowh'/)
+    flds = (/'Sl_fv         ',&
+             'Sl_ram1       ',&
+             'Sl_snowh      ',&
+             'Sl_wp2_clubb  ',&
+             'Sl_thlp2_clubb'/)
 
     do n = 1,size(flds)
        fldname = trim(flds(n))
@@ -778,7 +780,7 @@ contains
           if ( fldchk(is_local%wrap%FBexp(compatm)         , trim(fldname), rc=rc) .and. &
                fldchk(is_local%wrap%FBImp(complnd,complnd ), trim(fldname), rc=rc)) then
              call addmap(fldListFr(complnd)%flds, trim(fldname), &
-                  compatm, mapconsf, 'lfrin', lnd2atm_fmap)
+                  compatm, mapconsf, 'lfrin', lnd2atm_smap)
              call addmrg(fldListTo(compatm)%flds, trim(fldname), &
                   mrg_from=complnd, mrg_fld=trim(fldname), mrg_type='copy')
           end if

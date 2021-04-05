@@ -179,6 +179,15 @@
        canonical_units: m
        description: land export
      #
+     # clasp moment fields
+     - standard_name: Sl_wp2_clubb
+       canonical_units: m2/s2
+       description: land export
+     - standard_name: Sl_thlp2_clubb
+       canonical_units: kg2/kg2
+       description: land export
+     # ... 
+     #
      #-----------------------------------
      # section: atmosphere export
      #-----------------------------------
