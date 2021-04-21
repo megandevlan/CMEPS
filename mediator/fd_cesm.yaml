@@ -184,7 +184,19 @@
        canonical_units: m2/s2
        description: land export
      - standard_name: Sl_thlp2_clubb
-       canonical_units: kg2/kg2
+       canonical_units: K2
+       description: land export
+     - standard_name: Sl_wpthlp_clubb
+       canonical_units: m/s K
+       description: land export
+     - standard_name: Sl_wprtp_clubb
+       canonical_units: m/s kg/kg
+       description: land export
+     - standard_name: Sl_upwp_clubb
+       canonical_units: m2/s2 
+       description: land export
+     - standard_name: Sl_vpwp_clubb
+       canonical_units: m2/s2
        description: land export
      # ... 
      #

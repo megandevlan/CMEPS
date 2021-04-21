@@ -764,12 +764,17 @@ contains
     ! to atm: aerodynamic resistance        from land
     ! to atm: surface snow water equivalent from land
     ! ---------------------------------------------------------------------
-    allocate(flds(3))
-    flds = (/'Sl_fv         ',&
-             'Sl_ram1       ',&
-             'Sl_snowh      ',&
-             'Sl_wp2_clubb  ',&
-             'Sl_thlp2_clubb'/)
+    !allocate(flds(3))
+    allocate(flds(9))
+    flds = (/'Sl_fv          ',&
+             'Sl_ram1        ',&
+             'Sl_snowh       ',&
+             'Sl_wp2_clubb   ',&
+             'Sl_thlp2_clubb ',&
+             'Sl_wpthlp_clubb',&
+             'Sl_wprtp_clubb ',&
+             'Sl_upwp_clubb  ',&
+             'Sl_vpwp_clubb  '/)
 
     do n = 1,size(flds)
        fldname = trim(flds(n))
