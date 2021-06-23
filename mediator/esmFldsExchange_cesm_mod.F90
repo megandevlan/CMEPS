@@ -765,16 +765,27 @@ contains
     ! to atm: surface snow water equivalent from land
     ! ---------------------------------------------------------------------
     !allocate(flds(3))
-    allocate(flds(9))
-    flds = (/'Sl_fv          ',&
-             'Sl_ram1        ',&
-             'Sl_snowh       ',&
-             'Sl_wp2_clubb   ',&
-             'Sl_thlp2_clubb ',&
-             'Sl_wpthlp_clubb',&
-             'Sl_wprtp_clubb ',&
-             'Sl_upwp_clubb  ',&
-             'Sl_vpwp_clubb  '/)
+    allocate(flds(20))
+    flds = (/'Sl_fv             ',&
+             'Sl_ram1           ',&
+             'Sl_snowh          ',&
+             'Sl_wp2_clubb      ',&
+             'Sl_thlp2_clubb    ',&
+             'Sl_wpthlp_clubb   ',&
+             'Sl_wprtp_clubb    ',&
+             'Sl_upwp_clubb     ',&
+             'Sl_vpwp_clubb     ',&
+             'Sl_rtp2_clubb     ',&
+             'Sl_thlprtp_clubb  ',&
+             'Sl_wp3_clubb      ',&
+             'Sl_wp4_clubb      ',&
+             'Sl_up2_clubb      ',&
+             'Sl_vp2_clubb      ',&
+             'Sl_wp2thlp_clubb  ',&
+             'Sl_wp2rtp_clubb   ',&
+             'Sl_wprtp2_clubb   ',&
+             'Sl_wpthlp2_clubb  ',&
+             'Sl_wpthlprtp_clubb'/)
 
     do n = 1,size(flds)
        fldname = trim(flds(n))

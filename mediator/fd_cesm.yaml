@@ -198,6 +198,39 @@
      - standard_name: Sl_vpwp_clubb
        canonical_units: m2/s2
        description: land export
+     - standard_name: Sl_rtp2_clubb
+       canonical_units: kg2/kg2
+       description: land export
+     - standard_name: Sl_thlprtp_clubb
+       canonical_units: K kg/kg
+       description: land export
+     - standard_name: Sl_wp3_clubb
+       canonical_units: m3/s3
+       description: land export
+     - standard_name: Sl_wp4_clubb
+       canonical_units: m4/s4
+       description: land export
+     - standard_name: Sl_up2_clubb
+       canonical_units: m2/s2
+       description: land export
+     - standard_name: Sl_vp2_clubb
+       canonical_units: m2/s2
+       description: land export
+     - standard_name: Sl_wp2thlp_clubb
+       canonical_units: m2/s2 K
+       description: land export
+     - standard_name: Sl_wp2rtp_clubb
+       canonical_units: m2/s2 kg/kg
+       description: land export
+     - standard_name: Sl_wprtp2_clubb
+       canonical_units: m/s kg2/kg2
+       description: land export
+     - standard_name: Sl_wpthlp2_clubb
+       canonical_units: m/s K2
+       description: land export
+     - standard_name: Sl_wpthlprtp_clubb
+       canonical_units: m/s K kg/kg
+       description: land export
      # ... 
      #
      #-----------------------------------
