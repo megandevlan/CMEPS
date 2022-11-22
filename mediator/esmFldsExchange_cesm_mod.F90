@@ -1204,6 +1204,13 @@ contains
        call addfld(fldListFr(complnd)%flds, 'Fall_sen')
        call addfld(fldListFr(compice)%flds, 'Faii_sen')
        call addfld(fldListMed_aoflux%flds , 'Faox_sen')
+    !+++ MDF
+       !call addfld(fldListTo(compatm)%flds, 'Fl_shflxPatch') 
+       !call addfld(fldListFr(complnd)%flds, 'Fl_shflxPatch')
+
+       !call addfld(fldListTo(compatm)%flds, 'Fl_lhflxPatch')
+       !call addfld(fldListFr(complnd)%flds, 'Fl_lhflxPatch')
+    !--- MDF
     else
        if (fldchk(is_local%wrap%FBexp(compatm), 'Faxx_sen', rc=rc)) then
           if ( fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fall_sen', rc=rc)) then
@@ -1223,6 +1230,19 @@ contains
              call addmrg(fldListTo(compatm)%flds , 'Faxx_sen', &
                   mrg_from=compmed, mrg_fld='Faox_sen', mrg_type='merge', mrg_fracname='ofrac')
           end if
+          !+++ MDF
+          !if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_shflxPatch', rc=rc) .and. &
+          !     fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_shflxPatch', rc=rc)) then
+          !   call addmap(fldListFr(complnd)%flds , 'Fl_shflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          !   call addmrg(fldListTo(compatm)%flds , 'Fl_shflxPatch', mrg_from=complnd, mrg_fld='Fl_shflxPatch', mrg_type='copy')
+          !end if
+
+          !if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_lhflxPatch', rc=rc) .and. &
+          !     fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_lhflxPatch', rc=rc)) then
+          !   call addmap(fldListFr(complnd)%flds , 'Fl_lhflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          !   call addmrg(fldListTo(compatm)%flds , 'Fl_lhflxPatch', mrg_from=complnd, mrg_fld='Fl_lhflxPatch', mrg_type='copy')
+          !end if
+          !--- MDF
        end if
     end if
 
@@ -1520,6 +1540,51 @@ contains
           call addmrg(fldListTo(compatm)%flds, 'Sl_ddvel', mrg_from=complnd, mrg_fld='Sl_ddvel', mrg_type='copy')
        end if
     end if
+
+    ! +++ MDF 
+    !-----------------------------------------------------------------------------
+    ! to atm: patch-level information for initiation plumes in CLUBB+MF
+    !-----------------------------------------------------------------------------
+
+    if (phase == 'advertise') then
+       call addfld(fldListTo(compatm)%flds, 'Fl_shflxPatch')
+       call addfld(fldListFr(complnd)%flds, 'Fl_shflxPatch')
+
+       call addfld(fldListTo(compatm)%flds, 'Fl_lhflxPatch')
+       call addfld(fldListFr(complnd)%flds, 'Fl_lhflxPatch')
+
+       call addfld(fldListTo(compatm)%flds, 'Sl_fvPatch')
+       call addfld(fldListFr(complnd)%flds, 'Sl_fvPatch')
+
+       call addfld(fldListTo(compatm)%flds, 'Sl_areaPatch')
+       call addfld(fldListFr(complnd)%flds, 'Sl_areaPatch')
+    else
+       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_shflxPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_shflxPatch', rc=rc)) then
+          call addmap(fldListFr(complnd)%flds , 'Fl_shflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg(fldListTo(compatm)%flds , 'Fl_shflxPatch', mrg_from=complnd, mrg_fld='Fl_shflxPatch', mrg_type='copy')
+       end if
+
+       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_lhflxPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_lhflxPatch',rc=rc)) then
+          call addmap(fldListFr(complnd)%flds , 'Fl_lhflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg(fldListTo(compatm)%flds , 'Fl_lhflxPatch', mrg_from=complnd, mrg_fld='Fl_lhflxPatch', mrg_type='copy')
+       end if
+
+       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_fvPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_fvPatch',rc=rc)) then
+          call addmap(fldListFr(complnd)%flds , 'Sl_fvPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg(fldListTo(compatm)%flds , 'Sl_fvPatch', mrg_from=complnd, mrg_fld='Sl_fvPatch', mrg_type='copy')
+       end if
+
+       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_areaPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_areaPatch',rc=rc)) then
+          call addmap(fldListFr(complnd)%flds , 'Sl_areaPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg(fldListTo(compatm)%flds , 'Sl_areaPatch', mrg_from=complnd, mrg_fld='Sl_areaPatch', mrg_type='copy')
+       end if
+
+    end if
+    ! --- MDF
 
     !=====================================================================
     ! FIELDS TO OCEAN (compocn)
