@@ -199,6 +199,11 @@
      - standard_name: Sl_areaPatch
        canonical_units: fraction
        description: land export patch area (1->maxPatch)
+     #
+     - standard_name: Sl_tsPatch
+       canonical_units: K
+       description: land export patch temperature (1->maxPatch)
+     #
      # --- MDF
 
      #-----------------------------------
