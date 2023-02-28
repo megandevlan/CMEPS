@@ -1558,6 +1558,9 @@ contains
 
        call addfld(fldListTo(compatm)%flds, 'Sl_areaPatch')
        call addfld(fldListFr(complnd)%flds, 'Sl_areaPatch')
+
+       call addfld(fldListTo(compatm)%flds, 'Sl_tsPatch')
+       call addfld(fldListFr(complnd)%flds, 'Sl_tsPatch')
     else
        if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_shflxPatch', rc=rc) .and. &
             fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_shflxPatch', rc=rc)) then
@@ -1582,6 +1585,13 @@ contains
           call addmap(fldListFr(complnd)%flds , 'Sl_areaPatch', compatm, mapconsf, 'one', lnd2atm_map)
           call addmrg(fldListTo(compatm)%flds , 'Sl_areaPatch', mrg_from=complnd, mrg_fld='Sl_areaPatch', mrg_type='copy')
        end if
+
+       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_tsPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_tsPatch',rc=rc)) then
+          call addmap(fldListFr(complnd)%flds , 'Sl_tsPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg(fldListTo(compatm)%flds , 'Sl_tsPatch', mrg_from=complnd, mrg_fld='Sl_tsPatch', mrg_type='copy')
+       end if
+
 
     end if
     ! --- MDF
