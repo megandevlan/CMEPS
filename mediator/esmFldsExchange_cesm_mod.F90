@@ -1561,6 +1561,9 @@ contains
 
        call addfld(fldListTo(compatm)%flds, 'Sl_tsPatch')
        call addfld(fldListFr(complnd)%flds, 'Sl_tsPatch')
+
+       call addfld(fldListTo(compatm)%flds, 'Sl_lunPatch')
+       call addfld(fldListFr(complnd)%flds, 'Sl_lunPatch')
     else
        if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_shflxPatch', rc=rc) .and. &
             fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_shflxPatch', rc=rc)) then
@@ -1592,6 +1595,11 @@ contains
           call addmrg(fldListTo(compatm)%flds , 'Sl_tsPatch', mrg_from=complnd, mrg_fld='Sl_tsPatch', mrg_type='copy')
        end if
 
+       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_lunPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_lunPatch',rc=rc)) then
+          call addmap(fldListFr(complnd)%flds , 'Sl_lunPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg(fldListTo(compatm)%flds , 'Sl_lunPatch', mrg_from=complnd, mrg_fld='Sl_lunPatch', mrg_type='copy')
+       end if
 
     end if
     ! --- MDF

@@ -204,6 +204,10 @@
        canonical_units: K
        description: land export patch temperature (1->maxPatch)
      #
+     - standard_name: Sl_lunPatch
+       canonical_units: index
+       description: land export patch landunit 
+     #
      # --- MDF
 
      #-----------------------------------
