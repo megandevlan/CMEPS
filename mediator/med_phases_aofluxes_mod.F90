@@ -149,8 +149,8 @@ module med_phases_aofluxes_mod
      real(R8) , pointer :: u10         (:) => null() ! diagnostic: 10m wind speed
      real(R8) , pointer :: duu10n      (:) => null() ! diagnostic: 10m wind speed squared
      real(R8) , pointer :: ugust_out   (:) => null() ! diagnostic: gust wind added
-     real(R8) , pointer :: u10_withGust(:) => null() ! diagnostic: gust wind added
-     real(R8) , pointer :: u10res      (:) => null() ! diagnostic: no gust wind added
+     real(R8) , pointer :: u10_withGust(:) => null() ! diagnostic: 10m wind with gust
+     real(R8) , pointer :: u10res      (:) => null() ! diagnostic: 10m wind without gust (stability corrected)
      real(R8) , pointer :: ustar       (:) => null() ! saved ustar
      real(R8) , pointer :: re          (:) => null() ! saved re
      real(R8) , pointer :: ssq         (:) => null() ! saved sq
@@ -1112,8 +1112,8 @@ contains
 
     do n = 1,aoflux_in%lsize
        if (aoflux_in%mask(n) /= 0) then   
-          aoflux_out%u10(n)          = aoflux_out%u10res(n)
-          aoflux_out%u10_withGust(n) = sqrt(aoflux_out%duu10n(n))
+         aoflux_out%u10(n)          = aoflux_out%u10res(n)
+         aoflux_out%u10_withGust(n) = sqrt(aoflux_out%duu10n(n))
        end if
     enddo
 

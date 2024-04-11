@@ -193,9 +193,9 @@ contains
     real(R8),intent(out)  ::  tauy (nMax) ! surface stress, maridional (N)
     real(R8),intent(out)  ::  tref (nMax) ! diag:  2m ref height T     (K)
     real(R8),intent(out)  ::  qref (nMax) ! diag:  2m ref humidity (kg/kg)
-    real(R8),intent(out)  :: duu10n(nMax) ! diag: 10m wind speed squared (m/s)^2
-    real(R8),intent(out)  :: ugust_out(nMax) ! diag: gustiness addition to U10 (m/s)
-    real(R8),intent(out)  :: u10res(nMax) ! diag: gustiness addition to U10 (m/s)
+    real(R8),intent(out)  :: duu10n(nMax) ! diag: 10m neutral equivalent wind speed squared (m/s)^2
+    real(R8),intent(out)  :: ugust_out(nMax) ! diag: gustiness addition to U10n (m/s)
+    real(R8),intent(out)  :: u10res(nMax) ! diag:large-scale, resolved U10n without gusts (m/s)
 
     real(R8),intent(out),optional :: ustar_sv(nMax) ! diag: ustar
     real(R8),intent(out),optional :: re_sv   (nMax) ! diag: sqrt of exchange coefficient (water)
@@ -265,6 +265,8 @@ contains
     !--- for cold air outbreak calc --------------------------------
     real(R8)    :: tdiff(nMax)               ! tbot - ts
     real(R8)    :: vscl
+    !--- Quantities at 10m for stability correction of U10 in L&P
+    real(R8)    :: hol10,xqq10,xsq10,psixh10,psimh10,u10sc
 
     real(R8)    :: ugust      ! function: gustiness as a function of convective rainfall.  
     real(R8)    :: gprec   ! convective rainfall argument for ugust
@@ -467,8 +469,22 @@ contains
              fac     = (re/loc_karman) * (alz + al2 - psixh + psix2 )
              qref(n) =  qbot(n) - delq*fac
 
-             duu10n(n) = u10n*u10n ! 10m wind speed squared
-             u10res(n) = u10n * (wind0/vmag)  ! resolved 10m wind
+             !------------------------------------------------------------
+             ! compute diagnositcs: stability corrected 10m wind speed 
+             !------------------------------------------------------------
+             hol10   = loc_karman*loc_g*zref*  &
+                     (tstar/thbot(n)+qstar/(1.0_R8/loc_zvir+qbot(n)))/ustar**2
+             hol10   = sign( min(abs(hol10),10.0_R8), hol10 )
+             xsq10   = max(sqrt(abs(1.0_R8 - 16.0_R8*hol10)) , 1.0_R8)
+             xqq10   = sqrt(xsq10)
+             psimh10 = -5.0_R8*hol10*stable + (1.0_R8-stable)*psimhu(xqq10)
+             ! Correct u10n for stability 
+             u10sc  = u10n - (ustar/loc_karman)*psimh10
+            
+             duu10n(n) = u10n*u10n ! 10m neutral equivalent wind speed squared
+
+             u10res(n) = u10sc * (wind0/vmag)  ! resolved 10m wind, stability corrected
+
 
              !------------------------------------------------------------
              ! optional diagnostics, needed for water tracer fluxes (dcn)
