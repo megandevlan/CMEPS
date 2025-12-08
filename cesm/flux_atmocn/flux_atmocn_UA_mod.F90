@@ -359,7 +359,7 @@ contains
                 ! Unstable regime for U.
                 ! EQN (8)
                 u10 = vmag_abs + (ustar/loc_karman) * &
-                     & (log(zref/zbot(n)) - (psi_ua(1_IN,zref/obu) - psi_ua(1_IN,zeta)) )
+                     & (log(zref/zbot(n)) - (psi_ua(1_IN,zref/obu) + psi_ua(1_IN,zeta)) )
              endif
              ! Very unstable regime for T and q.
              ! EQN (11)
@@ -372,7 +372,7 @@ contains
              ! Unstable regime.
              ! EQN (8)
              u10 = vmag_abs + (ustar/loc_karman) * &
-                  & (log(zref/zbot(n)) - (psi_ua(1_IN,zref/obu) - psi_ua(1_IN,zeta)) )
+                  & (log(zref/zbot(n)) - (psi_ua(1_IN,zref/obu) + psi_ua(1_IN,zeta)) )
              ! EQN (12)
              tref(n) = thbot(n) + (tstar/loc_karman) * &
                   & (log(ztref/zbot(n)) - (psi_ua(2_IN,ztref/obu) - psi_ua(2_IN,zeta)) )
