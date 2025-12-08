@@ -120,6 +120,7 @@ contains
     real(R8) :: zoq         ! Roughness length for moisture (m)
     real(R8) :: zot         ! Roughness length for heat (m)
     real(R8) :: u10         ! 10-metre wind speed (m s-1)
+    real(R8) :: u10n        ! 10-metre neutral wind speed (m s-1)
     real(R8) :: re          ! Moisture exchange coefficient for compatibility with default algorithm.
     real(R8) :: loc_epsilon ! Ratio of gas constants (-)
 
@@ -401,7 +402,8 @@ contains
           endif
 
           tref(n) = tref(n) - gamma*ztref   ! pot. temp to temp correction
-          duu10n(n) = u10*u10 ! 10m wind speed squared
+          u10n=sqrt(us(n)**2+vs(n)**2)+(ustar/loc_karman)*(log(10.0_R8/zo))
+          duu10n(n) = u10n*u10n
 
           !------------------------------------------------------------
           ! optional diagnostics, needed for water tracer fluxes (dcn)

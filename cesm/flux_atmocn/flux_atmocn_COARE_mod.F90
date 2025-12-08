@@ -154,7 +154,7 @@ contains
                tau,hsb,hlb,                                    & ! out: fluxes
                zo,zot,zoq,hol,ustar,tstar,qstar,               & ! out: ss scales
                rd,rh,re,                                       & ! out: exch. coeffs
-               trf,qrf,urf,vrf)                                  ! out: reference-height params
+               trf,qrf,urf,vrf,u10n)                             ! out: reference-height params and u10n
 
           ! for the sake of maintaining same defs
           hol = zbot(n)/hol
@@ -179,7 +179,7 @@ contains
           !------------------------------------------------------------
           tref(n) = trf
           qref(n) = qrf
-          duu10n(n) = urf**2+vrf**2
+          duu10n(n) = u10n*u10n
 
           !------------------------------------------------------------
           ! optional diagnostics, needed for water tracer fluxes (dcn)
@@ -225,7 +225,7 @@ contains
         tau,hsb,hlb,                     &    ! out: fluxes
         zo,zot,zoq,L,usr,tsr,qsr,        &    ! out: ss scales
         Cd,Ch,Ce,                        &    ! out: exch. coeffs
-        trf,qrf,urf,vrf)                      ! out: reference-height params
+        trf,qrf,urf,vrf,u10n)                 ! out: reference-height params and u10n
 
     ! Arguments
     real(R8), intent(in)  :: ubt,vbt,tbt,qbt,rbt
@@ -234,7 +234,7 @@ contains
     real(R8), intent(out) :: tau,hsb,hlb
     real(R8), intent(out) :: zo,zot,zoq,L,usr,tsr,qsr
     real(R8), intent(out) :: Cd,Ch,Ce
-    real(R8), intent(out) :: trf,qrf,urf,vrf
+    real(R8), intent(out) :: trf,qrf,urf,vrf,u10n
 
     ! Local variables
     real(R8) :: ua,va,ta,q,rb,us,vs,ts,qs,zi,zu,zt,zq,zru,zrq,zrt       ! internal vars
@@ -411,6 +411,7 @@ contains
     qrf=qs-dq*(log(zrq/zoq)-psit_30(zrq/L))/(log(zq/zoq)-psit_30(zq/L))
     trf=ts-dt*(log(zrt/zot)-psit_30(zrt/L))/(log(zt/zot)-psit_30(zt/L))
     trf=trf+.0098_R8*zrt
+    u10n=sqrt(us**2+vs**2)+(usr/von)*log(10.0_R8/zo)
 
   end subroutine cor30a
 

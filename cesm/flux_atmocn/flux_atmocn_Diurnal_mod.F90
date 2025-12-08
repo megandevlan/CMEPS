@@ -394,7 +394,7 @@ contains
                   & ,tau,hsb,hlb                             &  ! out: fluxes
                   & ,zo,zot,zoq,hol,ustar,tstar,qstar        &  ! out: ss scales
                   & ,rd,rh,re                                &  ! out: exch. coeffs
-                  & ,trf,qrf,urf,vrf)                             ! out: reference-height params
+                  & ,trf,qrf,urf,vrf,u10n)                      ! out: reference-height params, u10n
 
              ! for the sake of maintaining same defs
              hol=zbot(n)/hol
@@ -561,7 +561,7 @@ contains
                      & ,tau,hsb,hlb                             &  ! out: fluxes
                      & ,zo,zot,zoq,hol,ustar,tstar,qstar        &  ! out: ss scales
                      & ,rd,rh,re                                &  ! out: exch. coeffs
-                     & ,trf,qrf,urf,vrf)                               ! out: reference-height params
+                     & ,trf,qrf,urf,vrf,u10n)                      ! out: reference-height params, u10n
 
                 ! for the sake of maintaining same defs
                 hol=zbot(n)/hol
@@ -616,8 +616,7 @@ contains
 
              tref(n) = trf
              qref(n) = qrf
-             duu10n(n) = urf**2+vrf**2
-             u10n = sqrt(duu10n(n))
+             duu10n(n) = u10n*u10n
           endif
 
           !------------------------------------------------------------
