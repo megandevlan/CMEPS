@@ -105,6 +105,7 @@ contains
     real(R8)    :: hol             ! H (at zbot) over L
     real(R8)    :: zo,zot,zoq      ! roughness lengths
     real(R8)    :: hsb,hlb         ! sens & lat heat flxs at zbot
+    real(R8)    :: u10n            ! 10m neutral wind
     real(R8)    :: tau             ! stress at zbot
     real(R8)    :: trf,qrf,urf,vrf ! reference-height quantities
 
