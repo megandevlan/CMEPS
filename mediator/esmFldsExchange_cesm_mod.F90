@@ -1226,10 +1226,10 @@ contains
     end if
 
     if (phase == 'advertise') then
-       call addfld(fldListTo(compatm)%flds, 'Faxx_sen')
-       call addfld(fldListFr(complnd)%flds, 'Fall_sen')
-       call addfld(fldListFr(compice)%flds, 'Faii_sen')
-       call addfld(fldListMed_aoflux%flds , 'Faox_sen')
+      !  call addfld(fldListTo(compatm)%flds, 'Faxx_sen')
+      !  call addfld(fldListFr(complnd)%flds, 'Fall_sen')
+      !  call addfld(fldListFr(compice)%flds, 'Faii_sen')
+      !  call addfld(fldListMed_aoflux%flds , 'Faox_sen')
     !+++ MDF
        !call addfld(fldListTo(compatm)%flds, 'Fl_shflxPatch') 
        !call addfld(fldListFr(complnd)%flds, 'Fl_shflxPatch')
@@ -1638,60 +1638,119 @@ contains
     ! to atm: patch-level information for initiation plumes in CLUBB+MF
     !-----------------------------------------------------------------------------
 
+!! MDF mod: Jan 2025; update to use new functions 
+
+
     if (phase == 'advertise') then
-       call addfld(fldListTo(compatm)%flds, 'Fl_shflxPatch')
-       call addfld(fldListFr(complnd)%flds, 'Fl_shflxPatch')
+      call addfld_from(complnd, 'Fl_shflxPatch')
+      call addfld_to(compatm, 'Fl_shflxPatch')
 
-       call addfld(fldListTo(compatm)%flds, 'Fl_lhflxPatch')
-       call addfld(fldListFr(complnd)%flds, 'Fl_lhflxPatch')
+      call addfld_from(complnd, 'Fl_lhflxPatch')
+      call addfld_to(compatm, 'Fl_lhflxPatch')
 
-       call addfld(fldListTo(compatm)%flds, 'Sl_fvPatch')
-       call addfld(fldListFr(complnd)%flds, 'Sl_fvPatch')
+      call addfld_from(complnd, 'Sl_fvPatch')
+      call addfld_to(compatm, 'Sl_fvPatch')
+      
+      call addfld_from(complnd, 'Sl_areaPatch')
+      call addfld_to(compatm, 'Sl_areaPatch')
 
-       call addfld(fldListTo(compatm)%flds, 'Sl_areaPatch')
-       call addfld(fldListFr(complnd)%flds, 'Sl_areaPatch')
+      call addfld_from(complnd, 'Sl_tsPatch')
+      call addfld_to(compatm, 'Sl_tsPatch')
 
-       call addfld(fldListTo(compatm)%flds, 'Sl_tsPatch')
-       call addfld(fldListFr(complnd)%flds, 'Sl_tsPatch')
+      call addfld_from(complnd, 'Sl_lunPatch')
+      call addfld_to(compatm, 'Sl_lunPatch')
 
-       call addfld(fldListTo(compatm)%flds, 'Sl_lunPatch')
-       call addfld(fldListFr(complnd)%flds, 'Sl_lunPatch')
+
+
+      !  call addfld(fldListTo(compatm)%flds, 'Fl_shflxPatch')
+      !  call addfld(fldListFr(complnd)%flds, 'Fl_shflxPatch')
+
+      !  call addfld(fldListTo(compatm)%flds, 'Fl_lhflxPatch')
+      !  call addfld(fldListFr(complnd)%flds, 'Fl_lhflxPatch')
+
+      !  call addfld(fldListTo(compatm)%flds, 'Sl_fvPatch')
+      !  call addfld(fldListFr(complnd)%flds, 'Sl_fvPatch')
+
+      !  call addfld(fldListTo(compatm)%flds, 'Sl_areaPatch')
+      !  call addfld(fldListFr(complnd)%flds, 'Sl_areaPatch')
+
+      !  call addfld(fldListTo(compatm)%flds, 'Sl_tsPatch')
+      !  call addfld(fldListFr(complnd)%flds, 'Sl_tsPatch')
+
+      !  call addfld(fldListTo(compatm)%flds, 'Sl_lunPatch')
+      !  call addfld(fldListFr(complnd)%flds, 'Sl_lunPatch')
     else
-       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_shflxPatch', rc=rc) .and. &
-            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_shflxPatch', rc=rc)) then
-          call addmap(fldListFr(complnd)%flds , 'Fl_shflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
-          call addmrg(fldListTo(compatm)%flds , 'Fl_shflxPatch', mrg_from=complnd, mrg_fld='Fl_shflxPatch', mrg_type='copy')
+      if ( fldchk(is_local%wrap%FBImp(complnd, complnd), 'Fl_shflxPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBExp(compatm)         , 'Fl_shflxPatch', rc=rc)) then
+          call addmap_from(complnd, 'Fl_shflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg_to(compatm, 'Fl_shflxPatch', mrg_from=complnd, mrg_fld='Fl_shflxPatch', mrg_type='copy')
        end if
 
-       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_lhflxPatch', rc=rc) .and. &
-            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_lhflxPatch',rc=rc)) then
-          call addmap(fldListFr(complnd)%flds , 'Fl_lhflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
-          call addmrg(fldListTo(compatm)%flds , 'Fl_lhflxPatch', mrg_from=complnd, mrg_fld='Fl_lhflxPatch', mrg_type='copy')
+      if ( fldchk(is_local%wrap%FBImp(complnd, complnd), 'Fl_lhflxPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBExp(compatm)         , 'Fl_lhflxPatch', rc=rc)) then
+          call addmap_from(complnd, 'Fl_lhflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg_to(compatm, 'Fl_lhflxPatch', mrg_from=complnd, mrg_fld='Fl_lhflxPatch', mrg_type='copy')
        end if
 
-       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_fvPatch', rc=rc) .and. &
-            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_fvPatch',rc=rc)) then
-          call addmap(fldListFr(complnd)%flds , 'Sl_fvPatch', compatm, mapconsf, 'one', lnd2atm_map)
-          call addmrg(fldListTo(compatm)%flds , 'Sl_fvPatch', mrg_from=complnd, mrg_fld='Sl_fvPatch', mrg_type='copy')
+      if ( fldchk(is_local%wrap%FBImp(complnd, complnd), 'Sl_fvPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBExp(compatm)         , 'Sl_fvPatch', rc=rc)) then
+          call addmap_from(complnd, 'Sl_fvPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg_to(compatm, 'Sl_fvPatch', mrg_from=complnd, mrg_fld='Sl_fvPatch', mrg_type='copy')
        end if
 
-       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_areaPatch', rc=rc) .and. &
-            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_areaPatch',rc=rc)) then
-          call addmap(fldListFr(complnd)%flds , 'Sl_areaPatch', compatm, mapconsf, 'one', lnd2atm_map)
-          call addmrg(fldListTo(compatm)%flds , 'Sl_areaPatch', mrg_from=complnd, mrg_fld='Sl_areaPatch', mrg_type='copy')
+      if ( fldchk(is_local%wrap%FBImp(complnd, complnd), 'Sl_areaPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBExp(compatm)         , 'Sl_areaPatch', rc=rc)) then
+          call addmap_from(complnd, 'Sl_areaPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg_to(compatm, 'Sl_areaPatch', mrg_from=complnd, mrg_fld='Sl_areaPatch', mrg_type='copy')
        end if
 
-       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_tsPatch', rc=rc) .and. &
-            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_tsPatch',rc=rc)) then
-          call addmap(fldListFr(complnd)%flds , 'Sl_tsPatch', compatm, mapconsf, 'one', lnd2atm_map)
-          call addmrg(fldListTo(compatm)%flds , 'Sl_tsPatch', mrg_from=complnd, mrg_fld='Sl_tsPatch', mrg_type='copy')
+      if ( fldchk(is_local%wrap%FBImp(complnd, complnd), 'Sl_tsPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBExp(compatm)         , 'Sl_tsPatch', rc=rc)) then
+          call addmap_from(complnd, 'Sl_tsPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg_to(compatm, 'Sl_tsPatch', mrg_from=complnd, mrg_fld='Sl_tsPatch', mrg_type='copy')
        end if
 
-       if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_lunPatch', rc=rc) .and. &
-            fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_lunPatch',rc=rc)) then
-          call addmap(fldListFr(complnd)%flds , 'Sl_lunPatch', compatm, mapconsf, 'one', lnd2atm_map)
-          call addmrg(fldListTo(compatm)%flds , 'Sl_lunPatch', mrg_from=complnd, mrg_fld='Sl_lunPatch', mrg_type='copy')
+      if ( fldchk(is_local%wrap%FBImp(complnd, complnd), 'Sl_lunPatch', rc=rc) .and. &
+            fldchk(is_local%wrap%FBExp(compatm)         , 'Sl_lunPatch', rc=rc)) then
+          call addmap_from(complnd, 'Sl_lunPatch', compatm, mapconsf, 'one', lnd2atm_map)
+          call addmrg_to(compatm, 'Sl_lunPatch', mrg_from=complnd, mrg_fld='Sl_lunPatch', mrg_type='copy')
        end if
+
+      !  if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_shflxPatch', rc=rc) .and. &
+      !       fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_shflxPatch', rc=rc)) then
+      !     call addmap(fldListFr(complnd)%flds , 'Fl_shflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
+      !     call addmrg(fldListTo(compatm)%flds , 'Fl_shflxPatch', mrg_from=complnd, mrg_fld='Fl_shflxPatch', mrg_type='copy')
+      !  end if
+
+      !  if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Fl_lhflxPatch', rc=rc) .and. &
+      !       fldchk(is_local%wrap%FBImp(complnd,complnd), 'Fl_lhflxPatch',rc=rc)) then
+      !     call addmap(fldListFr(complnd)%flds , 'Fl_lhflxPatch', compatm, mapconsf, 'one', lnd2atm_map)
+      !     call addmrg(fldListTo(compatm)%flds , 'Fl_lhflxPatch', mrg_from=complnd, mrg_fld='Fl_lhflxPatch', mrg_type='copy')
+      !  end if
+
+      !  if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_fvPatch', rc=rc) .and. &
+      !       fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_fvPatch',rc=rc)) then
+      !     call addmap(fldListFr(complnd)%flds , 'Sl_fvPatch', compatm, mapconsf, 'one', lnd2atm_map)
+      !     call addmrg(fldListTo(compatm)%flds , 'Sl_fvPatch', mrg_from=complnd, mrg_fld='Sl_fvPatch', mrg_type='copy')
+      !  end if
+
+      !  if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_areaPatch', rc=rc) .and. &
+      !       fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_areaPatch',rc=rc)) then
+      !     call addmap(fldListFr(complnd)%flds , 'Sl_areaPatch', compatm, mapconsf, 'one', lnd2atm_map)
+      !     call addmrg(fldListTo(compatm)%flds , 'Sl_areaPatch', mrg_from=complnd, mrg_fld='Sl_areaPatch', mrg_type='copy')
+      !  end if
+
+      !  if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_tsPatch', rc=rc) .and. &
+      !       fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_tsPatch',rc=rc)) then
+      !     call addmap(fldListFr(complnd)%flds , 'Sl_tsPatch', compatm, mapconsf, 'one', lnd2atm_map)
+      !     call addmrg(fldListTo(compatm)%flds , 'Sl_tsPatch', mrg_from=complnd, mrg_fld='Sl_tsPatch', mrg_type='copy')
+      !  end if
+
+      !  if ( fldchk(is_local%wrap%FBexp(compatm)        , 'Sl_lunPatch', rc=rc) .and. &
+      !       fldchk(is_local%wrap%FBImp(complnd,complnd), 'Sl_lunPatch',rc=rc)) then
+      !     call addmap(fldListFr(complnd)%flds , 'Sl_lunPatch', compatm, mapconsf, 'one', lnd2atm_map)
+      !     call addmrg(fldListTo(compatm)%flds , 'Sl_lunPatch', mrg_from=complnd, mrg_fld='Sl_lunPatch', mrg_type='copy')
+      !  end if
 
     end if
     ! --- MDF
