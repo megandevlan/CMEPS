@@ -1226,6 +1226,10 @@ contains
     end if
 
     if (phase == 'advertise') then
+       call addfld_to(compatm, 'Faxx_sen')
+       call addfld_from(complnd, 'Fall_sen')
+       call addfld_from(compice, 'Faii_sen')
+       call addfld_aoflux( 'Faox_sen')
       !  call addfld(fldListTo(compatm)%flds, 'Faxx_sen')
       !  call addfld(fldListFr(complnd)%flds, 'Fall_sen')
       !  call addfld(fldListFr(compice)%flds, 'Faii_sen')
