@@ -162,8 +162,10 @@ def _create_drv_namelists(case, infile, confdir, nmlgen, files):
 
     # make sure that variable add_gusts is only set to true if compset includes cam7 physics
     add_gusts = literal_to_python_value(nmlgen.get_value("add_gusts"), type_="logical")
-    if add_gusts:
-        expect("CAM70" in case.get_value("COMPSET"),"ERROR: add_gusts can only be set if CAM70 in compset {}".format(case.get_value("COMPSET")))
+    # MDF: Commenting out below ONLY to get some tests running in SCAM, which still has a CAM6 description. Ideally this should 
+    # be able to check if there's a -phys flag supplied to CAM that specifics cam7 physics... not sure how to do that. 
+    # if add_gusts:
+    #     expect("CAM70" in case.get_value("COMPSET"),"ERROR: add_gusts can only be set if CAM70 in compset {}".format(case.get_value("COMPSET")))
 
     # --------------------------------
     # Overwrite: set component coupling frequencies

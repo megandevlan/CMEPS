@@ -107,7 +107,7 @@ contains
             ts, mask,  seq_flux_atmocn_minwind, &
             sen, lat, lwup, evap,               &
             taux, tauy, tref, qref,             &
-            duu10n, ugust_out, u10res,          &
+            add_gusts, duu10n, ugust_out, u10res,          &
             ustar_sv=ustar_sv, re_sv=re_sv, ssq_sv=ssq_sv)
 
     else if (ocn_surface_flux_scheme == ocn_flux_scheme_ua) then

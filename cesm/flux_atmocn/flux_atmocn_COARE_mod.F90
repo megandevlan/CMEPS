@@ -45,7 +45,7 @@ contains
        ts, mask, seq_flux_atmocn_minwind,             &
        sen, lat, lwup, evap,                          &
        taux ,tauy, tref, qref,                        &
-       duu10n, ugust_out, u10res,                     &
+       add_gusts, duu10n, ugust_out, u10res,          &
        ustar_sv, re_sv, ssq_sv)
 
     !--- input arguments --------------------------------
@@ -53,6 +53,7 @@ contains
     real(R8) , intent(in) :: spval
     integer  , intent(in) :: nMax        ! data vector length
     integer  , intent(in) :: mask (nMax) ! ocn domain mask       0 <=> out of domain
+    logical  ,intent(in)  :: add_gusts   ! logical flag to determine if convective gustiness is added (MDF)
     real(R8) , intent(in) :: zbot (nMax) ! atm level height      (m)
     real(R8) , intent(in) :: ubot (nMax) ! atm u wind            (m/s)
     real(R8) , intent(in) :: vbot (nMax) ! atm v wind            (m/s)
@@ -117,6 +118,18 @@ contains
     real(R8)    :: tdiff(nMax) ! tbot - ts
     real(R8)    :: vscl
 
+    ! --- for convective gustiness
+    real(R8) :: ugust ! function: gustiness as a function of convective rainfall.
+    real(R8) :: gprec ! convective rainfall argument for ugust
+    real(R8) :: wind0 ! resolved large-scale 10m wind (no gust added)
+
+    ! --- Convective gustiness appropriate for input precipitation.
+    ! Following Regelsperger et al. (2000, J. Clim)
+    ! Ug = log(1.0+6.69R-0.476R^2)
+    ! Coefficients X by 8640 for mm/s (from cam) -> cm/day (for above forumla)
+    ! ------- 
+    ugust(gprec) = log(1._R8+57801.6_r8*gprec-3.55332096e7_r8*(gprec**2))
+
     !--- formats ----------------------------------------
     character(*),parameter :: subName = '(flux_atmOcn_COARE) '
     character(*),parameter ::   F00 = "('(flux_atmOcn_COARE) ',4a)"
@@ -133,7 +146,19 @@ contains
        if (mask(n) /= 0) then
 
           !--- compute some needed quantities ---
-          vmag = max(seq_flux_atmocn_minwind, sqrt( (ubot(n)-us(n))**2 + (vbot(n)-vs(n))**2) )
+
+          ! --- convective gustiness mods
+          if (add_gusts) then
+             vmag = max(seq_flux_atmocn_minwind, &
+                        sqrt( (ubot(n)-us(n))**2 + (vbot(n)-vs(n))**2 + (1.0_R8*ugust(min(rainc(n),6.94444e-4_r8))**2)) )
+             ugust_out(n) = ugust(min(rainc(n),6.94444e-4_r8))
+          else
+             vmag = max(seq_flux_atmocn_minwind, sqrt( (ubot(n)-us(n))**2 + (vbot(n)-vs(n))**2) )
+             ugust_out(n) = 0.0_r8
+          end if
+          wind0 = max(seq_flux_atmocn_minwind, sqrt( (ubot(n)-us(n))**2 + (vbot(n)-vs(n))**2) )
+
+          !vmag = max(seq_flux_atmocn_minwind, sqrt( (ubot(n)-us(n))**2 + (vbot(n)-vs(n))**2) )
 
           if (use_coldair_outbreak_mod) then
              ! Cold Air Outbreak Modification:
@@ -141,8 +166,12 @@ contains
              ! based on Mahrt & Sun 1995,MWR
 
              if (tdiff(n).lt.td0) then
+                ! if add_gusts wind0 and vmag are different, both need this factor.
+
                 vscl=min((1._R8+alpha*(abs(tdiff(n)-td0)**0.5_R8/abs(vmag))),maxscl)
                 vmag=vmag*vscl
+                vscl=min((1._R8+alpha*(abs(tdiff(n)-td0)**0.5_R8/abs(wind0))),maxscl)
+                wind0=wind0*vscl
              endif
           endif
 
@@ -189,8 +218,12 @@ contains
           if (present(re_sv   )) re_sv(n) = re
           if (present(ssq_sv )) ssq_sv(n) = ssq
 
-          u10res(n) = sqrt(duu10n(n))
-          ugust_out(n) = 0._r8
+          ! MDF: Changing definition of u10res; it's meant to be the resolved 10m wind
+          ! component (not including gustiness), so I compute it as below in L&P and 
+          ! vote we keep it consistent here. 
+          !u10res(n) = sqrt(duu10n(n))
+          u10res(n) = u10n * (wind0/vmag)  ! resolved 10m wind
+         !  ugust_out(n) = 0._r8. ! MDF: This is now defined above 
 
        else
 

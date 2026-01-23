@@ -76,7 +76,7 @@ contains
     real(R8),intent(out)  :: qref (nMax)            ! diag:  2m ref humidity (kg/kg)
     real(R8),intent(out)  :: duu10n(nMax)           ! diag: 10m wind speed squared (m/s)^2
     real(R8),intent(out)  :: ugust_out(nMax)        ! diag: gustiness addition to U10 (m/s)
-    real(R8),intent(out)  :: u10res(nMax)           ! diag: gustiness addition to U10 (m/s)
+    real(R8),intent(out)  :: u10res(nMax)           ! diag: resolved wind speed (no convective gustiness)
 
     real(R8),intent(out),optional :: ustar_sv(nMax) ! diag: ustar
     real(R8),intent(out),optional :: re_sv (nMax)   ! diag: sqrt of exchange coefficient (water)
